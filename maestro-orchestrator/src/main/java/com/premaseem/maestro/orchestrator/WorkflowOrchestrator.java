@@ -198,8 +198,7 @@ public final class WorkflowOrchestrator implements AutoCloseable {
 
     private void requireAwaitingApproval(WorkflowRun run, Stage stage) {
         if (run.statusOf(stage) != StageStatus.AWAITING_APPROVAL) {
-            throw new IllegalStateException(
-                    stage + " is not awaiting approval (status=" + run.statusOf(stage) + ")");
+            throw new InvalidStageTransitionException(stage, String.valueOf(run.statusOf(stage)));
         }
     }
 

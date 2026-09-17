@@ -13,42 +13,39 @@
     <artifactId>maestro-orchestrator</artifactId>
     <packaging>jar</packaging>
     <name>maestro-orchestrator</name>
-    <description>Agentic SDLC orchestration engine: dependency-graphed stages, approval gates, retry/rollback, policy guardrails, audit trail and metrics. Framework-agnostic by design (no Spring dependency) so the engine is fast to test; a thin adapter layer wires it to HTTP later.</description>
+    <description>Agentic SDLC orchestration engine: dependency-graphed stages, approval gates, retry/rollback, policy guardrails, audit trail and metrics, exposed over a thin Spring Boot REST adapter. The engine itself (engine/retry/policy/agent/orchestrator/audit packages) stays framework-agnostic so it's fast and deterministic to test.</description>
 
     <dependencies>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-junit-jupiter</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
+        <finalName>maestro-orchestrator</finalName>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.4</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
