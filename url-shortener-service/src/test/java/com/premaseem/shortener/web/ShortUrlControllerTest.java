@@ -8,6 +8,7 @@ import com.premaseem.shortener.service.ShortUrlService;
 import com.premaseem.shortener.web.dto.CreateShortUrlRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -24,7 +25,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+// Security filters are irrelevant to what this test covers (controller
+// wiring, validation, status codes) and the default-active Spring profile
+// leaves the API open anyway -- addFilters = false keeps that true inside
+// the @WebMvcTest slice too, which doesn't pick up the app's own
+// SecurityConfig.
 @WebMvcTest(ShortUrlController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class ShortUrlControllerTest {
 
     @Autowired
