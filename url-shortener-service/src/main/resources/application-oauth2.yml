@@ -2,15 +2,22 @@
 # (SPRING_PROFILES_ACTIVE=oauth2 or --spring.profiles.active=oauth2).
 # This is what makes Google login truly optional: the registration below
 # is absent from the default application.yml entirely, so a plain startup
-# never even attempts to resolve GOOGLE_CLIENT_ID/GOOGLE_CLIENT_SECRET --
-# there's nothing that would fail if they're unset. Only opting into this
-# profile requires them.
+# never even attempts to resolve GOOGLE_CLIENT_ID/GOOGLE_CLIENT_SECRET.
+#
+# Empty-string defaults (${...:}) are deliberate, not decorative: Spring's
+# property resolution does NOT throw on a missing env var here -- it
+# silently falls back to the literal "${GOOGLE_CLIENT_ID}" text as the
+# value, which would then be sent to Google as-is (a real failure mode we
+# hit while testing this). OAuth2CredentialsGuard is what actually fails
+# startup with a clear message when these are unset; these empty defaults
+# are a second line of defense so a real client-id/secret string is never
+# silently replaced by unresolved placeholder text.
 spring:
   security:
     oauth2:
       client:
         registration:
           google:
-            client-id: ${GOOGLE_CLIENT_ID}
-            client-secret: ${GOOGLE_CLIENT_SECRET}
+            client-id: ${GOOGLE_CLIENT_ID:}
+            client-secret: ${GOOGLE_CLIENT_SECRET:}
             scope: openid,email,profile
